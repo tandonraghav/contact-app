@@ -18,5 +18,5 @@ public interface ContactBookService {
 
     ContactBook findByEmailId(String emailId);
 
-    boolean delete(String emailId);
+    ContactBook delete(String emailId);
 }

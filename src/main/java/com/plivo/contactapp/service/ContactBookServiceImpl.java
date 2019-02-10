@@ -46,12 +46,17 @@ public class ContactBookServiceImpl implements ContactBookService {
 
     @Override
     public ContactBook findByEmailId(String emailId) {
-        return null;
+        ContactBookEntity contactBookEntity=contactBookRepository.findByEmailId(emailId);
+        if(contactBookEntity==null) return new ContactBook(ErrorCode.CONTACT_NOT_FOUND);
+        return ResponseMapper.fromEntity(contactBookEntity);
     }
 
     @Override
-    public boolean delete(String emailId) {
-        return false;
+    public ContactBook delete(String emailId) {
+        ContactBookEntity contactBookEntity=contactBookRepository.findByEmailId(emailId);
+        if(contactBookEntity==null) return new ContactBook(ErrorCode.CONTACT_NOT_FOUND);
+        contactBookRepository.delete(contactBookEntity.getId());
+        return new ContactBook();
     }
 
     @Override
