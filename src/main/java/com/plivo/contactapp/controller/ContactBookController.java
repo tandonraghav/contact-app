@@ -5,6 +5,9 @@ import com.plivo.contactapp.models.ContactBookList;
 import com.plivo.contactapp.models.Response;
 import com.plivo.contactapp.service.ContactBookService;
 import com.plivo.contactapp.utils.ResponseUtils;
+import io.swagger.annotations.ApiOperation;
+import io.swagger.annotations.ApiResponse;
+import io.swagger.annotations.ApiResponses;
 import javax.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.RequestBody;
@@ -21,6 +24,11 @@ public class ContactBookController {
 
     @Autowired private ContactBookService contactBookService;
 
+    @ApiOperation(httpMethod = "POST", consumes = "application/json", value =
+        "Api to create contact book",
+        produces = "application/json")
+    @ApiResponses(value = {
+        @ApiResponse(code = 200, message = "Successful")})
     @RequestMapping(method = RequestMethod.POST, value = "/create")
     public Response<ContactBook> create(@Valid @RequestBody ContactBook contactBook){
         ContactBook contactBookResponse=contactBookService.create(contactBook);
@@ -31,6 +39,11 @@ public class ContactBookController {
         }
     }
 
+    @ApiOperation(httpMethod = "POST", consumes = "application/json", value =
+        "Api to update contact book",
+        produces = "application/json")
+    @ApiResponses(value = {
+        @ApiResponse(code = 200, message = "Successful")})
     @RequestMapping(method = RequestMethod.PUT, value = "/update")
     public Response<ContactBook> update(@Valid @RequestBody ContactBook contactBook){
         ContactBook contactBookResponse=contactBookService.update(contactBook);
