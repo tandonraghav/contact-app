@@ -2,6 +2,8 @@ package com.plivo.contactapp.service;
 
 
 import com.plivo.contactapp.models.ContactBook;
+import com.plivo.contactapp.models.ContactBookList;
+import java.util.List;
 
 /**
  * @author raghav on 10/2/19.
@@ -12,7 +14,9 @@ public interface ContactBookService {
 
     ContactBook update(ContactBook contactBook);
 
-    ContactBook get(Long emailId,Long name);
+    ContactBookList findByName(String name,int pageNo,int size);
 
-    boolean delete(Long emailId);
+    ContactBook findByEmailId(String emailId);
+
+    boolean delete(String emailId);
 }

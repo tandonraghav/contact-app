@@ -1,5 +1,9 @@
 package com.plivo.contactapp.security.filter;
 
+import com.fasterxml.jackson.core.JsonProcessingException;
+import com.fasterxml.jackson.databind.ObjectMapper;
+import com.plivo.contactapp.models.ErrorCode;
+import com.plivo.contactapp.models.Response;
 import com.plivo.contactapp.security.tokens.RestToken;
 import java.io.IOException;
 
@@ -9,6 +13,7 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
 import org.apache.log4j.Logger;
+import org.springframework.http.HttpStatus;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.web.filter.OncePerRequestFilter;
 
@@ -40,12 +45,38 @@ public class TokenAuthFilter extends OncePerRequestFilter{
 				SecurityContextHolder.getContext().setAuthentication(new RestToken(null,"contact-app"));
 				
 			}else{
-				response.setContentType("application/json");
-				String errorResponse = "{'error':'Bad Key'}";
-				response.getWriter().write(errorResponse);
+				updateFailureResponse(request,response);
+				return;
 			}
 		//}
 		filterChain.doFilter(request, response);
+	}
+
+	private void updateFailureResponse(HttpServletRequest request,
+		HttpServletResponse response) {
+		try {
+			//RuleServiceException ex = new RuleServiceException(error);
+			Response output = new Response();
+			output.setSuccess(false);
+			output.setErrorCode(ErrorCode.AUTH_FAILED);
+			output.setErrorMessage(ErrorCode.AUTH_FAILED.name());
+			response.setContentType("application/json");
+			response.setStatus(HttpStatus.INTERNAL_SERVER_ERROR.value());
+			response.getWriter().write(convertObjectToJson(output));
+
+			logger.debug("Auth Failed: ");
+
+		} catch (IOException e) {
+			logger.error(e.getMessage());
+		}
+	}
+
+	private String convertObjectToJson(Object object) throws JsonProcessingException {
+		if (object == null) {
+			return null;
+		}
+		ObjectMapper mapper = new ObjectMapper();
+		return mapper.writeValueAsString(object);
 	}
 
 }

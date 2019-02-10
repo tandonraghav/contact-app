@@ -2,11 +2,17 @@ package com.plivo.contactapp.service;
 
 import com.plivo.contactapp.entity.ContactBookEntity;
 import com.plivo.contactapp.models.ContactBook;
+import com.plivo.contactapp.models.ContactBookList;
 import com.plivo.contactapp.models.ErrorCode;
 import com.plivo.contactapp.repository.ContactBookRepository;
 import com.plivo.contactapp.utils.ResponseMapper;
+import java.util.ArrayList;
+import java.util.List;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
+import org.springframework.util.StringUtils;
 
 /**
  * @author raghav on 10/2/19.
@@ -39,14 +45,38 @@ public class ContactBookServiceImpl implements ContactBookService {
     }
 
     @Override
-    public ContactBook get(Long emailId, Long name) {
+    public ContactBook findByEmailId(String emailId) {
         return null;
     }
 
     @Override
-    public boolean delete(Long emailId) {
+    public boolean delete(String emailId) {
         return false;
     }
+
+    @Override
+    public ContactBookList findByName(String name,int pageNo,int size) {
+        List<ContactBook> contactBooks=new ArrayList<>();
+        if(StringUtils.hasText(name)){
+            if(pageNo==0) pageNo=0;
+            if(size==0) size=10;
+            Pageable pageable = new PageRequest(pageNo,size);
+
+            List<ContactBookEntity> contactBookEntities=contactBookRepository.findByName(name,pageable);
+
+            if(contactBookEntities!=null && contactBookEntities.size()>0){
+                for(ContactBookEntity c:contactBookEntities){
+                    contactBooks.add(ResponseMapper.fromEntity(c));
+                }
+            }
+        }
+
+        ContactBookList contactBookList=new ContactBookList();
+        contactBookList.setContactBooks(contactBooks);
+        return contactBookList;
+    }
+
+
 
 
 }
