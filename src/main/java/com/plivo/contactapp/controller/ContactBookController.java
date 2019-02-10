@@ -54,6 +54,11 @@ public class ContactBookController {
         }
     }
 
+    @ApiOperation(httpMethod = "DELETE", consumes = "application/json", value =
+        "Api to delete contact book by email",
+        produces = "application/json")
+    @ApiResponses(value = {
+        @ApiResponse(code = 200, message = "Successful")})
     @RequestMapping(method = RequestMethod.DELETE, value = "/delete")
     public Response<ContactBook> delete(@RequestParam String emailId){
         ContactBook contactBookResponse=contactBookService.delete(emailId);
@@ -64,6 +69,11 @@ public class ContactBookController {
         }
     }
 
+    @ApiOperation(httpMethod = "GET", consumes = "application/json", value =
+        "Api to get contact book",
+        produces = "application/json")
+    @ApiResponses(value = {
+        @ApiResponse(code = 200, message = "Successful")})
     @RequestMapping(method = RequestMethod.GET, value = "/searchByName")
     public Response<ContactBookList> findByName(@RequestParam String name,
         @RequestParam(required = false,defaultValue = "0") int pageNo,
@@ -76,6 +86,11 @@ public class ContactBookController {
         }
     }
 
+    @ApiOperation(httpMethod = "GET", consumes = "application/json", value =
+        "Api to get contact book",
+        produces = "application/json")
+    @ApiResponses(value = {
+        @ApiResponse(code = 200, message = "Successful")})
     @RequestMapping(method = RequestMethod.GET, value = "/searchByEmail")
     public Response<ContactBook> findByEmail(@RequestParam String emailId){
         ContactBook contactBookResponse =  contactBookService.findByEmailId(emailId);

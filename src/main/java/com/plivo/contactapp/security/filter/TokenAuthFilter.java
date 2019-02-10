@@ -58,6 +58,7 @@ public class TokenAuthFilter extends OncePerRequestFilter {
         try {
             //RuleServiceException ex = new RuleServiceException(error);
             Response output = new Response();
+            response.setStatus(HttpServletResponse.SC_OK);
             output.setSuccess(false);
             output.setErrorCode(ErrorCode.AUTH_FAILED);
             output.setErrorMessage(ErrorCode.AUTH_FAILED.name());
